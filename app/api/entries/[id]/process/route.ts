@@ -5,8 +5,8 @@ import { applyAnalysis } from "@/lib/character/apply";
 import { buildUserMessage } from "@/lib/character/prompt";
 import type { Analysis, CharacterState } from "@/lib/character/schema";
 
-// Thinking plus a long transcript can take a while.
-export const maxDuration = 120;
+// Fits the Vercel Hobby limit; low effort keeps a typical entry well under it.
+export const maxDuration = 60;
 
 export async function POST(_req: Request, ctx: RouteContext<"/api/entries/[id]/process">) {
   const { id } = await ctx.params;

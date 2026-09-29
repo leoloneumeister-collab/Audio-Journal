@@ -11,14 +11,18 @@ Record a voice note on your phone, read and replay old entries, and watch a litt
 
 Everything is private per user through Postgres Row Level Security, including the audio files.
 
-## Setup
+## Put it online
+
+Follow [DEPLOY.md](DEPLOY.md): Supabase + Vercel + an Anthropic key, about 15 minutes. After deploying, open `/setup` on your site to check everything is connected.
+
+## Local development
 
 1. Create a Supabase project and run `supabase/migrations/0001_init.sql` in the SQL editor (or `supabase db push`).
 2. In Supabase Auth → URL configuration, add `http://localhost:3000/auth/callback` and your production URL's `/auth/callback` as redirect URLs.
 3. `cp .env.example .env.local` and fill in the Supabase URL, anon key and an Anthropic API key.
 4. `npm install && npm run dev`
 
-Deploy to Vercel with the same env vars. The mic only works over HTTPS (or localhost).
+The mic only works over HTTPS or on localhost.
 
 ## Scripts
 

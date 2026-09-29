@@ -3,17 +3,20 @@ import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { AnalysisSchema, type Analysis } from "./character/schema";
 import { SYSTEM_PROMPT } from "./character/prompt";
 
-const client = new Anthropic();
-const MODEL = process.env.CLAUDE_MODEL ?? "claude-opus-5-5";
+export const MODEL = process.env.CLAUDE_MODEL ?? "claude-opus-5-5";
+
+// Created on first use so a missing key fails one request, not the whole module.
+let client: Anthropic | null = null;
+const getClient = () => (client ??= new Anthropic());
 
 export class AnalysisRefusedError extends Error {}
 
 export async function analyzeEntry(userMessage: string): Promise<Analysis> {
-  const response = await client.beta.messages.parse({
+  const response = await getClient().beta.messages.parse({
     model: MODEL,
     max_tokens: 16000,
     thinking: { type: "adaptive" },
-    output_config: { effort: "medium", format: betaZodOutputFormat(AnalysisSchema) },
+    output_config: { effort: "low", format: betaZodOutputFormat(AnalysisSchema) },
     // If a safety classifier declines, let the API retry on a fallback model.
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
